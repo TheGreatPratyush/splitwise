@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<style>
+    body{
+        margin: 0%;
+        padding: 0%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #or{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #form{
+        display: flex;
+        flex-direction: column;
+        /* this flex direction is one of the most important css due to which form is looking nice */
+    }
+
+    #container{
+        padding: 30px;
+        border: 1px solid black;
+       width: 360px;
+        height: auto;
+        border-radius: 30px;
+    }
+    #sign_in{
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #form label{
+        font-size: 14px;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    #form input{
+        padding: 10px  15px ;
+        margin-bottom: 16px;
+    }
+
+    #form #submit{
+        border: none;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 15px;
+         background: #2da44e
+    }
+    #form #register{
+        margin-bottom: 26px;
+    }
+</style>
+</head>
+<body>
+    <div id="main">
+    <div id="container">
+        <form action="" id="form">
+
+             <h2 id="sign_in">Sign IN </h2>
+
+            <button id="google">
+                Continue With Google
+            </button>
+
+
+            <div id="or">
+                <h3>Or</h3>
+            </div>
+            
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email">
+
+
+        
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password">
+
+            <div id="register">
+                dont have a account <a href="#">Register</a>
+            </div>
+
+        <button id="submit">Submit</button>
+        </form>
+    </div>
+    </div>
+</body>
+</html>

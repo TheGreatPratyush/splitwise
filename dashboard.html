@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0%;
+            padding: 0%;
+            color: #111;
+        }
+        #main_grid {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            grid-template-rows: 64px 1fr;
+            height: 100vh;
+        }
+
+        .sidebar{
+
+            grid-row: 1/3;
+            padding: 24px 16px;
+            background: #1f2933;
+            color: white;
+        }
+
+        .logo{
+            margin-bottom: 30px;
+        }
+
+        .menu{
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .items{
+            cursor: pointer;
+            /* border: 1px solid black; */
+            padding: 10px 20px;
+            /* border-radius: 16px; */
+        }
+
+        .navbar{
+            border-bottom: 1px solid #e5e7eb;
+            background: white;
+            grid-column: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .username {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .navright {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .iconbtn {
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background: #ccc;
+            border-radius: 50%;
+        }
+
+        .main {
+            padding: 24px;
+            background: #f4f6f8;
+        }
+
+
+        #groups{
+            position: relative;
+        }
+
+        .dropdown{
+            position: absolute;
+            top: 0%;
+            left: 50%;
+            border: 1px solid black;
+            padding:6px 0px ;
+            border-radius: 8px;
+            background: white;
+            color: #111;
+            display: none;
+            min-width: 100px;
+        }
+        #groups:hover .dropdown{
+            display: block;
+        }
+
+        .dropitems{
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .c{
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            padding: 24px;
+            width: 320px;
+            border-radius: 12px;
+            z-index: 101;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: white;
+        }
+    
+        .cbutton{
+            margin-top: 30px;
+            display: flex;
+            justify-content: start;
+            gap: 30px;
+        }
+
+        #wbackground {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);  /* dark overlay */
+            z-index: 100
+        }
+
+        .hidden{
+            display: none;
+        }
+        .member-list {
+            margin: 20px 20px 20px 18px;   /* indentation for dots */
+            padding: 10px;
+        }
+
+        .member-list li {
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .pending-text {
+            color: #9ca3af;
+            margin-left: 6px;
+            font-size: 12px;
+        }
+
+        
+    </style>
+</head>
+<body>
+
+<div id="main_grid">
+
+    <div class="sidebar">
+
+        <div class="logo">
+            Splitwise
+        </div>
+
+        <div class="menu"></div>
+
+    </div>
+        
+        <div class="navbar">
+            <div class="navleft">
+                <div class="welcome">
+                    <div class="username">Welcome , Jhon</div>
+                    <div class="subtitle">Have a nice day</div>
+                </div>
+            </div>
+
+            <div class="navright">
+                <div class="iconbtn">🔔</div>
+
+                <div class="profile">
+                    <div class="avatar"></div>
+                </div>
+
+            </div>
+            
+
+        </div>
+
+
+    <div class="main">
+        <div id="pageContent">
+            Dashboard content here
+
+
+            <div id="dashboardEmpty" class="hidden">
+                <h2>Welcome to Splitwise 👋</h2>
+
+                <p style="color:#6b7280; margin-top:8px;">
+                You haven’t created any groups yet.
+                </p>
+
+                <button id="createFirstGroupBtn" style="margin-top:16px;">
+                + Create your first group
+                </button>
+            </div>
+
+
+
+            <div id="dashboardSummary" class="hidden">
+                <h2>Dashboard</h2>
+
+                <div style="margin-top:12px;">
+                <strong>Net Balance:</strong>
+                <span id="netBalance">₹0</span>
+                </div>
+            </div>
+
+
+            <div id="dashboardGroups" class="hidden">
+                <h3 style="margin-top:24px;">Your Groups</h3>
+
+                <div id="groupCards"></div>
+            </div>
+
+
+      
+            <div id="dashboardActivity" class="hidden">
+                <h3 style="margin-top:24px;">Recent Activity</h3>
+
+                <div id="activityList"></div>
+            </div>
+
+            </div>
+        </div>
+    </div>
+
+
+            <div id="wbackground" class="hidden"></div>
+
+            <div id="popup" class="c hidden">
+                <h3>Create Group</h3>
+
+                <label for="groupname">Group Name</label>
+                <input type="text" name="groupname" id="groupname" placeholder="Goatrip">
+
+                <label for="name">Name</label>
+                <input type="text" id="name">
+
+                <label for="inviteEmail">Invite Friends</label>
+                <input type="email" id="inviteEmail" placeholder="friend@email.com">
+                
+
+                <div class="cbutton">
+                    <button class="createButton">Create</button>
+
+                    <button class="cancelbutton">Cancel</button>
+                </div>
+            </div>
+
+            <div id="addMemberPopup" class="c hidden">
+                <h3>Add Member</h3>
+
+                <label>Name</label>
+                <input type="text" id="addMemberName">
+
+                <label>Email</label>
+                <input type="email" id="addMemberEmail">
+
+                <div class="cbutton">
+                    <button id="addMemberConfirm">Add</button>
+                    <button id="addMemberCancel">Cancel</button>
+                </div>
+            </div>
+
+
+            <div id="addExpensePopup" class="c hidden">
+                <h3>Add Expense</h3>
+
+                <label>Description</label>
+                <input type="text" id="expenseTitle" placeholder="Dinner">
+
+                <label>Amount</label>
+                <input type="number" id="expenseAmount">
+
+                <label>Paid by</label>
+                <select id="paidBy"></select>
+
+                <label>Split between</label>
+                <div id="splitMembers"></div>
+
+                <div class="cbutton">
+                    <button id="addExpenseConfirm">Add</button>
+                    <button id="addExpenseCancel">Cancel</button>
+                </div>
+            </div>
+    </div>
+</div>
+<script>
+
+    let currentGroupId = null 
+
+
+    let editingExpenseId = null
+
+
+
+    function renderDashboard() {
+            let groups = getGroups();
+
+            let empty = document.getElementById("dashboardEmpty");
+            let summary = document.getElementById("dashboardSummary");
+            let groupsBox = document.getElementById("dashboardGroups");
+            let activity = document.getElementById("dashboardActivity");
+
+            let groupCards = document.getElementById("groupCards");
+            let activityList = document.getElementById("activityList");
+            let netBalanceEl = document.getElementById("netBalance");
+
+            
+            empty.classList.add("hidden");
+            summary.classList.add("hidden");
+            groupsBox.classList.add("hidden");
+            activity.classList.add("hidden");
+
+            groupCards.innerHTML = "";
+            activityList.innerHTML = "";
+
+            
+            if (groups.length === 0) {
+                empty.classList.remove("hidden");
+                return;
+            }
+
+           
+            summary.classList.remove("hidden");
+            groupsBox.classList.remove("hidden");
+
+            
+            let net = 0;
+
+            groups.forEach(group => {
+                let balances = calculateBalances(group);
+                net += balances[currentUser.email] || 0;
+            });
+
+            netBalanceEl.textContent =
+                net >= 0 ? `+ ₹${net.toFixed(2)}` : `- ₹${Math.abs(net).toFixed(2)}`;
+
+        
+            groups.forEach(group => {
+                let card = document.createElement("div");
+                card.style.background = "white";
+                card.style.padding = "14px";
+                card.style.marginBottom = "10px";
+                card.style.borderRadius = "8px";
+                card.style.cursor = "pointer";
+                card.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
+
+                card.innerHTML = `
+                    <div style="font-weight:600;">${group.name}</div>
+                    <div style="font-size:12px; color:#6b7280;">
+                        ${group.members.length} members
+                    </div>
+                `;
+
+                card.addEventListener("click", () => {
+                    openGroupRoom(group.id);
+                });
+
+                groupCards.appendChild(card);
+            });
+
+          
+            let activities = [];
+
+            groups.forEach(group => {
+                group.expenses.forEach(exp => {
+                    activities.push({
+                        group: group.name,
+                        title: exp.title,
+                        amount: exp.amount,
+                        time: exp.id
+                    });
+                });
+            });
+
+            activities.sort((a, b) => b.time - a.time);
+
+            if (activities.length > 0) {
+                activity.classList.remove("hidden");
+
+                activities.slice(0, 5).forEach(a => {
+                    let div = document.createElement("div");
+                    div.style.padding = "8px 0";
+                    div.style.fontSize = "14px";
+
+                    div.textContent = `${a.title} in ${a.group} — ₹${a.amount}`;
+                    activityList.appendChild(div);
+                });
+            }
+        }
+
+
+    function showBalances(group){
+        let balances = calculateBalances(group)
+
+        let list = document.getElementById("balanceList")
+
+        list.innerHTML=""
+        group.members.forEach(member=>{
+            let amount = balances[member.email]
+
+            if (amount==0) return 
+
+            let row = document.createElement("div")
+
+            row.style.display = "flex"
+            row.style.justifyContent = "space-between"
+            row.style.alignItems = "center"
+            row.style.padding = "10px"
+            row.style.marginBottom = "8px"
+            row.style.background = "#fff"
+            row.style.borderRadius = "8px"
+            row.style.boxShadow = "0 1px 4px rgba(0,0,0,0.08)"
+
+            let nameSpan = document.createElement("span")
+            nameSpan.textContent = member.name
+            nameSpan.style.fontWeight = "500"
+
+            let amountSpan = document.createElement("span")
+            amountSpan.style.fontWeight = "600"
+
+            if (amount > 0) {
+                amountSpan.textContent = `+ ₹${amount.toFixed(2)}`
+                amountSpan.style.color = "#16a34a" // green
+            } else {
+                amountSpan.textContent = `− ₹${Math.abs(amount).toFixed(2)}`
+                amountSpan.style.color = "#dc2626" // red
+            }
+
+            if (member.status === "pending") {
+                row.style.opacity = "0.6"
+                nameSpan.textContent += " (pending)"
+            }
+
+            row.appendChild(nameSpan)
+            row.appendChild(amountSpan)
+
+            list.appendChild(row)
+        })
+        
+    }
+
+    function calculateBalances(group){
+        let balances = {}
+
+        group.members.forEach(member=>{
+            balances[member.email]=0
+        })
+        
+        group.expenses.forEach(expense=>{
+            let share = expense.amount/expense.splitBetween.length
+
+            expense.splitBetween.forEach(email=>{
+                balances[email] -=share
+            })
+
+            balances[expense.paidBy] += expense.amount;
+
+            // if this line doesnot exits initally lets say the 1200/3=400 so everbody balance becomes -400 but payer has already paid therefore 1200 which the person has paid must be added in his balance so the net amout becomes 800 which this person will recive because of positive sign
+            // rest of the people will give 400 because of negative sign 
+        })
+        return balances
+    }
+
+    function calculateSettlements(group){
+        let balances = calculateBalances(group)
+
+        let payers = []
+
+        let receivers = []
+
+        for (let email  in balances){
+            let amount = balances[email]
+
+            if (amount >0 ){
+                receivers.push({
+                email,
+                amount
+                })
+            } else if (amount < 0){
+                payers.push({
+                email,
+                amount: -amount   // make positive for easier math
+                })
+            }
+
+        }
+        // this the most important part of the complete code how are we knowing that who oews how much money to whom in balances we had the total who owes or will get who muct 
+        // but here this is important because we are calculating how much money one will revice from the other 
+
+
+        let settlements =[]
+        i=0
+        j=0
+        while (i<payers.length&& j<receivers.length){
+            let payer = payers[i]
+            
+            let receiver = receivers[j]
+
+            let payAmount = Math.min(payer.amount, receiver.amount)// most important line tha what ever amount is less we will consider that much amount is either given or recieved
+
+            settlements.push({
+                from: payer.email,
+                to: receiver.email,
+                amount: payAmount
+            })
+
+            payer.amount -= payAmount
+
+            receiver.amount-=payAmount
+
+            if (payer.amount === 0) i++;
+
+             if (receiver.amount === 0) j++;
+
+        }
+
+        return settlements
+
+
+    }
+
+
+    function showSettlements(group){
+        let settlement = calculateSettlements(group)
+
+        let list = document.getElementById("settlementList")
+
+        list.innerHTML=""
+
+        if (settlement.length === 0) {
+            list.innerHTML = `<p style="color : green">All settled 🎉</p>`;
+            return;
+        }
+
+        settlement.forEach(s => {
+            let fromMember = group.members.find(m=>m.email==s.from)
+
+            let toMember = group.members.find(m=>m.email==s.to)
+
+            let div = document.createElement("div")
+
+            div.style.display = "flex"
+            div.style.alignItems = "center"
+            div.style.justifyContent = "space-between"
+            div.style.padding = "10px"
+            div.style.marginBottom = "8px"
+            div.style.background = "#fff"
+            div.style.borderRadius = "8px"
+            div.style.boxShadow = "0 1px 4px rgba(0,0,0,0.08)"
+
+
+            let fromName;
+            let toName;
+
+            if (fromMember) {
+                fromName = fromMember.name;
+            } else {
+                fromName = s.from;   
+            }
+
+            if (toMember) {
+                toName = toMember.name;
+            } else {
+                toName = s.to;       
+            }
+
+            // div.textContent = `${fromName} pays ${toName} ₹${s.amount.toFixed(2)}`;
+            
+            div.innerHTML = `
+            <span style="color:#dc2626;font-weight:500;">
+                ${fromName}
+            </span>
+            <span style="margin:0 8px;">→</span>
+            <span style="color:#16a34a;font-weight:500;">
+                ${toName}
+            </span>
+            <span style="font-weight:600;">
+                ₹${s.amount.toFixed(2)}
+            </span>`
+
+            list.appendChild(div);
+                
+            })
+
+        
+
+    }
+    function getGroups(){
+        return JSON.parse(localStorage.getItem("groups"))||[]
+    }
+
+    function saveGroups(groups){
+        localStorage.setItem("groups",JSON.stringify(groups))
+    }
+
+    function addMemberPopup(){
+        document.getElementById("addMemberPopup").classList.remove("hidden");
+        document.getElementById("wbackground").classList.remove("hidden");
+    }
+
+    function closeAddMemberPopup() {
+        document.getElementById("addMemberPopup").classList.add("hidden");
+        document.getElementById("wbackground").classList.add("hidden");
+    }
+
+    function addExpensePopup(){
+
+        document.getElementById("expenseTitle").value = "";
+        document.getElementById("expenseAmount").value = "";
+        document.getElementById("paidBy").innerHTML = "";
+        document.getElementById("splitMembers").innerHTML = "";
+
+        document.getElementById("addExpensePopup").classList.remove("hidden");
+        document.getElementById("wbackground").classList.remove("hidden");
+
+        let groups = getGroups()
+
+        let group = groups.find(g=>g.id ==currentGroupId)
+
+        let paidBy = document.getElementById("paidBy")
+
+        paidBy.innerHTML=""
+
+        group.members.forEach(member=>{
+            let option = document.createElement("option")
+            option.value=member.email   
+            option.textContent=member.name
+            paidBy.appendChild(option)
+
+        }) 
+
+
+        let splitbetween= document.getElementById("splitMembers")
+        
+        splitbetween.innerHTML=""
+
+        group.members.forEach(member=>{
+            let label = document.createElement("label")
+            label.style.display= "block"
+
+
+            let checkbox = document.createElement("input")
+            checkbox.type= "checkbox"
+
+            checkbox.value = member.email
+            checkbox.checked= true
+
+            label.appendChild(checkbox)
+
+            label.append(" " + member.name)
+
+            splitbetween.appendChild(label)
+        })
+    
+    }
+
+    let addExpense = document.getElementById("addExpenseConfirm")
+    addExpense.addEventListener("click",addExpenseWork)
+
+
+        function addExpenseWork(){
+
+            let title = document.getElementById("expenseTitle").value.trim()
+
+            let amount = Number(document.getElementById("expenseAmount").value)
+            
+            let paidBy = document.getElementById("paidBy").value
+
+
+            let checkedMembers = []
+            document.querySelectorAll("#splitMembers input:checked").forEach(cb=>{
+                checkedMembers.push(cb.value)
+            })
+
+            if (!title || amount <= 0 || checkedMembers.length === 0) {
+                alert("Please fill all expense details");
+                return;
+            }
+
+            let groups = getGroups()
+
+            let group = groups.find(g=>g.id ==currentGroupId)
+
+            if (!group) {
+                alert("Group not found");
+                return;
+            }
+
+            if (editingExpenseId !== null) {
+                group.expenses = group.expenses.filter(
+                    e => e.id !== editingExpenseId
+                );
+                editingExpenseId = null;
+            }
+
+            group.expenses.push({
+                id: Date.now(),
+                title : title,
+                amount : amount,
+                paidBy : paidBy ,
+                splitBetween: checkedMembers
+            })
+
+        saveGroups(groups)
+        closeAddExpensePopup()
+
+        let updatedGroups = getGroups();
+        let updatedGroup = updatedGroups.find(g => g.id === currentGroupId);
+        showExpenses(updatedGroup);
+
+        showBalances(updatedGroup);
+        showSettlements(updatedGroup);
+
+    }
+
+    function closeAddExpensePopup() {
+
+        editingExpenseId = null
+        document.getElementById("addExpensePopup").classList.add("hidden");
+        document.getElementById("wbackground").classList.add("hidden");
+    }
+
+
+
+    function renderDefaultSidebar() {
+        let sidebar = document.querySelector(".menu");
+
+        sidebar.innerHTML = `
+            <div class="items" id="dashboardBtn">Dashboard</div>
+
+            <div class="items" id="groups">
+                Groups
+                <div class="dropdown">
+                    <div class="dropitems" id="view">View All Groups</div>
+                    <div class="dropitems" id="create">Create A Group</div>
+                </div>
+            </div>
+
+            <div class="items">Activity</div>
+            <div class="items">Profile</div>
+        `;
+
+        
+        document.getElementById("dashboardBtn").addEventListener("click", () => {
+                currentGroupId = null;
+                renderDefaultSidebar();
+                renderDashboard();
+        });
+
+
+        document.getElementById("createFirstGroupBtn")?.addEventListener("click", openPopup);
+
+        document.getElementById("view").addEventListener("click", viewAllGroups);
+
+        document.getElementById("create").addEventListener("click", openPopup);
+
+
+
+    }
+     
+    document.getElementById("addMemberCancel").addEventListener("click", closeAddMemberPopup);
+
+
+    document.getElementById("addExpenseCancel").addEventListener("click",closeAddExpensePopup)
+
+    let popup = document.getElementById("popup");
+    let back = document.getElementById("wbackground");
+    let cancel = document.getElementsByClassName("cancelbutton")[0];
+
+
+    function openPopup(){
+        popup.classList.remove("hidden");
+        back.classList.remove("hidden");
+    }
+
+    function closePopup(){
+        popup.classList.add("hidden");
+        back.classList.add("hidden");
+    }
+
+    cancel.addEventListener("click", closePopup);
+
+    back.addEventListener("click", () => {
+        closePopup();          // close Create Group popup
+        closeAddMemberPopup();
+        closeAddExpensePopup()// close Add Member popup
+    })
+
+
+    let create= document.getElementsByClassName("createButton")[0]
+
+    const currentUser = {
+        name: "John",
+        email: "john@gmail.com"
+    };
+    // currently i am not making the it dynamic just to start the main logic we must know who created the group 
+    // once we will need to make it dynamic nothing changes expect that we will fetch it  
+
+    create.addEventListener("click",()=>{
+        
+        let groupname= document.querySelector("#groupname").value.trim()
+        let inviteemail = document.querySelector("#inviteEmail").value.trim()
+
+        let memberName=  document.querySelector("#name").value.trim()
+        
+        if (groupname===""){
+            alert("Group name is required")
+            return 
+        }
+
+
+        let group = {
+            id : Date.now(),
+            name : groupname,
+            members: [
+                {
+                    name: currentUser.name,
+                    email: currentUser.email,
+                    status: "accepted"
+
+                }
+                ]  ,
+            expenses: [] 
+
+        }
+
+        if(memberName==""){
+            alert("Member name is required")
+            return
+        }
+
+        if(inviteemail!=""){
+            group.members.push({
+                name : memberName ,
+                email : inviteemail,
+                status : "pending"
+            })
+        }
+
+
+        let groups = getGroups();
+        groups.push(group);
+        saveGroups(groups);
+
+        console.log("ALL GROUPS:", groups);
+        closePopup()
+
+        document.querySelector("#groupname").value = "";
+        document.querySelector("#name").value = "";
+        document.querySelector("#inviteEmail").value = "";
+
+    })
+    
+
+    let dash = document.getElementById("pageContent")
+
+    function viewAllGroups(){
+
+
+        let groups = getGroups()
+        dash.innerHTML = "<h2>Your Groups</h2>"
+
+        if (groups.length==0){
+            dash.innerHTML+=`
+                <p style="color:#6b7280; margin-top:10px;">
+                    No groups created yet.
+                </p>
+            `
+            return 
+        }
+
+
+        let container = document.createElement("div");
+        container.style.marginTop = "16px";
+
+
+        groups.forEach(group =>{
+            let div = document.createElement("div")
+            div.style.background = "white";
+            div.style.padding = "14px 16px";
+            div.style.marginBottom = "10px";
+            div.style.borderRadius = "8px";
+            div.style.cursor = "pointer";
+            div.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
+
+
+            div.innerHTML = `
+                <div style="font-weight:600;">${group.name}</div>
+                <div style="font-size:12px; color:#6b7280;">
+                    ${group.members.length} members
+                </div>
+            `;
+
+            container.appendChild(div)
+
+            div.addEventListener("click",()=>{
+                openGroupRoom(group.id)
+            })
+            dash.appendChild(div)
+        })
+    }
+    
+    function openGroupRoom(groupid){
+
+        currentGroupId = groupid
+
+        renderGroupSidebar()
+
+        let groups = getGroups()
+
+        let group = groups.find(g => g.id === groupid)
+
+        if (!group){
+            alert("Group not found")
+            return 
+        }
+
+        let page = document.getElementById("pageContent")
+
+        page.innerHTML = `
+        <h2>${group.name}</h2>
+
+        <button id="addExpenseBtn">+ Add Expense</button>
+
+        <h3 style="margin-top:20px;">Balances</h3>
+        <div id="balanceList"></div>
+
+        <h3 style="margin-top:20px;">Settle Up</h3>
+        <div id="settlementList"></div>
+
+        <h3 style="margin-top:20px;">Expenses</h3>
+        <div id="expenseList"></div>
+
+
+        `
+        document.getElementById("addExpenseBtn").addEventListener("click",addExpensePopup)
+
+
+        showBalances(group);
+        showExpenses(group)
+
+        showSettlements(group)
+    }
+    
+
+    function editExpenses(expenseId){
+        let groups = getGroups()
+
+        let group = groups.find(g=> g.id == currentGroupId)
+
+        if (!group) return 
+
+        let expense = group.expenses.find(e => e.id === expenseId)
+
+        if (!expense) return
+
+        editingExpenseId = expenseId
+
+        addExpensePopup()
+
+        document.getElementById("expenseTitle").value = expense.title;
+        document.getElementById("expenseAmount").value = expense.amount;
+        document.getElementById("paidBy").value = expense.paidBy;
+
+        document.querySelectorAll("#splitMembers input").forEach(cb=>{
+            cb.checked = expense.splitBetween.includes(cb.value)
+        })
+
+    }
+    function deleteExpenses(expenseId){
+        let groups = getGroups()
+
+        let group = groups.find(e=>e.id==currentGroupId)
+
+        if (!group) return;
+
+        // what filter do is it returns an array with the element where the given conditionn is true if the given condition is false it will not add that element in array
+        // since it dont modify the original array hence we are reassiging the array with the new array
+        group.expenses = group.expenses.filter(e => e.id !== expenseId)
+
+        saveGroups(groups)
+
+        showExpenses(group);
+        showBalances(group);
+        showSettlements(group);
+    }
+    function showExpenses(group){
+        let list = document.getElementById("expenseList")   
+
+        
+        list.innerHTML=""
+
+        if (!group.expenses || group.expenses.length === 0) {
+            list.innerHTML = "<p>No expenses yet</p>";
+            return;
+        }
+        // this group which is taken as parameter contains members array containg object storing name and email 
+        // and expenses is also a array containg object containing key as id title amount paidby splitbetween 
+    
+        // splitbetween is an array containg email of persons with whom is money is to be distributed with 
+
+        group.expenses.forEach(expense=>{
+            // personpaid will contain an object containg name and email 
+            let personPaid = group.members.find(m=>m.email == expense.paidBy )
+
+            let splitNames = [];
+
+            expense.splitBetween.forEach(email => {
+                let member = group.members.find(m => m.email === email);
+                splitNames.push(member ? member.name : email);
+            });
+
+
+            let card = document.createElement("div");
+            card.style.background = "white";
+            card.style.padding = "12px";
+            card.style.marginBottom = "10px";
+            card.style.borderRadius = "8px";
+
+            card.innerHTML = `
+            <div style="font-weight:600;">${expense.title}</div>
+            <div>₹${expense.amount}</div>
+            <div>Paid by: ${personPaid ? personPaid.name : expense.paidBy}</div>
+            <div>Split: ${splitNames.join(", ")}</div>
+            <div style="margin-top:8px;">
+                <button data-id="${expense.id}" class="editExpenseBtn">Edit</button>
+                <button data-id="${expense.id}" class="deleteExpenseBtn">Delete</button>
+            </div>
+            `;
+
+
+            list.appendChild(card);
+
+            card.querySelector(".deleteExpenseBtn").addEventListener("click", () => {
+                deleteExpenses(expense.id)
+            });
+
+            card.querySelector(".editExpenseBtn").addEventListener("click", () => {
+                editingExpenseId = expense.id
+                editExpenses(expense.id);
+            })
+
+
+        })
+    }
+    function renderGroupSidebar(){
+
+        let page = document.getElementById("pageContent")
+
+        let groups = getGroups()
+
+        let group = groups.find(g => g.id===currentGroupId)
+
+        let sidebar = document.querySelector(".menu")
+
+        sidebar.innerHTML = `
+            <div class="items" id="backdashboard">← Back</div>
+
+            <div style="margin-top:20px">
+                <b style="margin-left:20px">${group.name}</b>
+
+            <div style="margin-top:10px;">
+                <div style="margin-left:20px ; margin-top:20px ">Members</div>
+                    <ul class="member-list">
+                        ${group.members.map(m => `
+                            <li>
+                                ${m.name}
+                                ${m.status === "pending" ? `<span class="pending-text">(pending)</span>` : ""}
+                            </li>
+                        `).join("")}
+                    </ul>
+            </div>
+
+            <div class="items" id="addMemberBtn" style="margin-top:20px;">
+                + Add Member
+            </div>
+        `
+        document.getElementById("backdashboard").addEventListener("click",()=>{
+            currentGroupId = null;
+            renderDefaultSidebar()
+            viewAllGroups()
+        })
+
+        document.getElementById("addMemberBtn").addEventListener("click",addMemberPopup)
+        
+    }
+
+    document.getElementById("addMemberConfirm").addEventListener("click",()=>{
+        let name = document.getElementById("addMemberName").value.trim();
+        let email = document.getElementById("addMemberEmail").value.trim();
+
+        if (!name || !email) {
+            alert("Name and email required");
+            return;
+        }
+        
+        let groups = getGroups()
+        let group = groups.find(g=>g.id==currentGroupId)
+
+
+        let exists = false;
+        
+        for (let m of group.members) {
+            if (m.email === email) {
+                exists = true;
+                break; // stops immediately
+            }
+        }
+
+        if (exists){
+            alert("Member with this email is already a member of group")
+            return
+        }
+
+        group.members.push({
+            name,
+            email,
+            status: "pending"
+        })
+
+        saveGroups(groups)
+
+        renderGroupSidebar()
+
+        closeAddMemberPopup()
+    })
+    
+    renderDefaultSidebar();
+
+    renderDashboard()
+
+</script>
+</body>
+</html>
