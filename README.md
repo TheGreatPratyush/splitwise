@@ -1,5 +1,5 @@
 Please before reeviewing the website first go through README.md
-
+link to open the site :  https://thegreatpratyush.github.io/splitwise/
 Splitwise-like Expense Sharing App
 
 A front-end implementation of an expense sharing application inspired by Splitwise.
