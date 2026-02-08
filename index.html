@@ -607,13 +607,19 @@
         
 
     }
+    // what actually this function is doing it provide the items stored in localstorage if any 
+    // else an empty array 
+    
     function getGroups(){
         return JSON.parse(localStorage.getItem("groups"))||[]
     }
-
+    // it saves the items in local storage in form of string
     function saveGroups(groups){
         localStorage.setItem("groups",JSON.stringify(groups))
     }
+
+    // whenever we click on add member button in side bar which comes when you are inside any group 
+    // initally the popup is hidden because in this class display = none 
 
     function addMemberPopup(){
         document.getElementById("addMemberPopup").classList.remove("hidden");
