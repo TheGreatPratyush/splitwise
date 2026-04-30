@@ -117,6 +117,3 @@ Refresh the page once to see the group
 
 Start adding members and expenses
 
-This README honestly shows:
-
-what works ✅
